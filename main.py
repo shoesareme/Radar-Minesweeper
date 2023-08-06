@@ -4,8 +4,8 @@ import random
 from tkinter import messagebox as tkMessageBox
 
 boardSize = 10
-density = 2
-radiusSpace = 3
+density = 1
+radiusSpace = 2
 displayZero = False
 
 """
@@ -150,9 +150,13 @@ class minesweeperBoard(tk.Tk):
     def gameOver(self, msg="You lost. Play Again?"):
         for i in self.board.keys():
             omega = self.board[i]
-            if self.logic.board[(omega[0], omega[1])] == "Mine":
+            if self.logic.board[(omega[0], omega[1])] == "Mine" and i.cget("text") == "":
                 i.config(fg="blue")
                 i.config(text="M")
+        for i in self.logic.flagLocation:
+            if self.backBoard[i].cget("text") == "F" and i not in self.logic.mineLocation:
+                self.backBoard[i].config(fg="pink")
+                self.backBoard[i].config(text="X")
         res = tkMessageBox.askyesno("Game Over", msg)
 
         if res:
