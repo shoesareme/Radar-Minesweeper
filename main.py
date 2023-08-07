@@ -5,7 +5,8 @@ from tkinter import messagebox as tkMessageBox
 
 boardSize = 10
 density = 1
-radiusSpace = 2
+radiusSpace = 1
+expandSpace = 1
 displayZero = False
 
 """
@@ -111,7 +112,7 @@ class minesweeperBoard(tk.Tk):
     def flag(self, event):
         clicked_btn = event.widget
         row, col = self.board[clicked_btn]
-        if clicked_btn.cget("text") == "F":
+        if clicked_btn.cget("text") == "🚩":
             self.logic.flagLocation.remove((row, col))
             clicked_btn.config(fg="black")
             clicked_btn.config(text="")
@@ -119,7 +120,7 @@ class minesweeperBoard(tk.Tk):
         if clicked_btn.cget("text") != "":
             return
         clicked_btn.config(fg="red")
-        clicked_btn.config(text="F")
+        clicked_btn.config(text="🚩")
         self.logic.flagLocation.add((row, col))
         if self.logic.flagLocation == self.logic.mineLocation:
             self.gameOver("You win! Play Again?")
@@ -130,7 +131,7 @@ class minesweeperBoard(tk.Tk):
             return
         if self.backBoard[(row, col)].cget("text") != "":
             return
-        space = self.logic.radar(1, row, col)
+        space = self.logic.radar(expandSpace, row, col)
         r = self.logic.radar(radiusSpace, row, col)
         self.backBoard[(row, col)].config(text=r)
         self.backBoard[(row, col)].config(bg='ivory2')
@@ -152,9 +153,9 @@ class minesweeperBoard(tk.Tk):
             omega = self.board[i]
             if self.logic.board[(omega[0], omega[1])] == "Mine" and i.cget("text") == "":
                 i.config(fg="blue")
-                i.config(text="M")
+                i.config(text="💣")
         for i in self.logic.flagLocation:
-            if self.backBoard[i].cget("text") == "F" and i not in self.logic.mineLocation:
+            if self.backBoard[i].cget("text") == "🚩" and i not in self.logic.mineLocation:
                 self.backBoard[i].config(fg="pink")
                 self.backBoard[i].config(text="X")
         res = tkMessageBox.askyesno("Game Over", msg)
